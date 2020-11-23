@@ -29,15 +29,56 @@ namespace SampleWPF
             InitializeComponent();
         }
 
-        private void SKElement_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
+        private IShape shape = new RectangleShape(100, 100, 200, 150)
+        {
+            Stroke = new Stroke() { Color = CoreShape.Color.Red, Width = 2 },
+            Fill = new Fill() { Color = CoreShape.Color.LightSkyBlue }
+        };
+        private IShape? activeShape;
+        private CoreShape.Point oldPoint;
+
+
+        private void sKElement_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
             var g = new SkiaGraphics(e.Surface.Canvas);
-            var shape = new RectangleShape(100,100,200,150)
-            {
-                Stroke = new Stroke() { Color = CoreShape.Color.Red, Width = 2 },
-                Fill = new Fill() { Color = CoreShape.Color.LightSkyBlue }
-            };
+            g.ClearCanvas(CoreShape.Color.Ivory);
             shape.Draw(g);
+        }
+
+        private void sKElement_MouseMove(object sender, MouseEventArgs e)
+        {
+            var p = e.GetPosition(skElement);
+            var currentPoint = new CoreShape.Point((float)p.X, (float)p.Y);
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                activeShape?.Drag(oldPoint, currentPoint);
+            }
+            else
+            {
+                if (shape.HitTest(currentPoint))
+                {
+                    Cursor = Cursors.SizeAll;
+                    activeShape = shape;
+                }
+                else
+                {
+                    Cursor = Cursors.Arrow;
+                    activeShape = null;
+                }
+            }
+            oldPoint = currentPoint;
+            skElement.InvalidateVisual();
+        }
+
+        private void skElement_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void skElement_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

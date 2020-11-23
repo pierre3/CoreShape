@@ -1,5 +1,4 @@
-﻿using System;
-using CoreShape.Graphics;
+﻿using CoreShape.Graphics;
 using SkiaSharp;
 
 namespace CoreShape.Extensions.SkiaSharp
@@ -10,7 +9,11 @@ namespace CoreShape.Extensions.SkiaSharp
 
         public SkiaGraphics(SKCanvas canvas)
         {
-            Canvas = canvas; 
+            Canvas = canvas;
+        }
+        public virtual void ClearCanvas(Color color)
+        {
+            Canvas.Clear(color.ToSk());
         }
 
         public virtual void DrawRectangle(Rectangle rectangle, Stroke stroke)
@@ -22,5 +25,6 @@ namespace CoreShape.Extensions.SkiaSharp
         {
             Canvas.DrawRect(rectangle.ToSk(), new SKPaint().SetFill(fill));
         }
+
     }
 }

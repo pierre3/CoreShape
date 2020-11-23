@@ -1,6 +1,5 @@
 ﻿using CoreShape.Graphics;
 using SkiaSharp;
-using System;
 
 namespace CoreShape.Extensions.SkiaSharp
 {

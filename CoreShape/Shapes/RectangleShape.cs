@@ -1,15 +1,10 @@
 ﻿using CoreShape.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoreShape.Shapes
 {
     public class RectangleShape : IShape
     {
-        public Rectangle Bounds { get; init; }
+        public Rectangle Bounds { get; protected set; }
         public Stroke Stroke { get; set; } = Stroke.NullObject;
         public Fill Fill { get; set; } = Fill.NullObject;
 
@@ -24,7 +19,7 @@ namespace CoreShape.Shapes
         public RectangleShape(float left, float top, float width, float height)
             : this(new Rectangle(left, top, width, height)) { }
 
-        public void Draw(IGraphics g)
+        public virtual void Draw(IGraphics g)
         {
             if (!Fill.IsNull)
             {
@@ -35,6 +30,22 @@ namespace CoreShape.Shapes
                 g.DrawRectangle(Bounds, Stroke);
             }
 
+        }
+
+        public virtual bool HitTest(Point p)
+        {
+            if( Bounds.Left <= p.X && p.X <= Bounds.Right 
+                && Bounds.Top <= p.Y && p.Y <= Bounds.Bottom)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void Drag(Point oldPointer, Point currentPointer)
+        {
+            var (dx, dy) = (currentPointer.X - oldPointer.X, currentPointer.Y - oldPointer.Y);
+            Bounds = new Rectangle(Bounds.Left + dx, Bounds.Top + dy, Bounds.Size.Width, Bounds.Size.Height);
         }
     }
 }
