@@ -2,11 +2,11 @@
 {
     public class Fill
     {
-        public Color Color { get; set; }
+        public Color Color { get; set; } = Color.White;
 
-        public static readonly Fill NullObject = new NullFill();
-        public bool IsNull => this is NullFill;
-        protected sealed class NullFill : Fill
-        { }
+        public Fill(Color color)
+        {
+            Color = color;
+        }
     }
 }

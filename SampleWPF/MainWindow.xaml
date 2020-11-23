@@ -10,9 +10,7 @@
     <Grid>
         <skiaSharp:SKElement x:Name="skElement" 
                              PaintSurface="sKElement_PaintSurface" 
-                             MouseMove="sKElement_MouseMove"
-                             MouseDown="skElement_MouseDown"
-                             MouseUp="skElement_MouseUp"/>
+                             MouseMove="sKElement_MouseMove"/>
 
     </Grid>
 </Window>

@@ -5,8 +5,8 @@ namespace CoreShape.Shapes
     public class RectangleShape : IShape
     {
         public Rectangle Bounds { get; protected set; }
-        public Stroke Stroke { get; set; } = Stroke.NullObject;
-        public Fill Fill { get; set; } = Fill.NullObject;
+        public Stroke? Stroke { get; set; }
+        public Fill? Fill { get; set; }
 
         public RectangleShape(Rectangle bounds)
         {
@@ -21,11 +21,11 @@ namespace CoreShape.Shapes
 
         public virtual void Draw(IGraphics g)
         {
-            if (!Fill.IsNull)
+            if (Fill is not null)
             {
                 g.FillRectangle(Bounds, Fill);
             }
-            if (!Stroke.IsNull)
+            if (Stroke is not null)
             {
                 g.DrawRectangle(Bounds, Stroke);
             }

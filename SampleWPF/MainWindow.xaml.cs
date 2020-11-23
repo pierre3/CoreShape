@@ -31,8 +31,8 @@ namespace SampleWPF
 
         private IShape shape = new RectangleShape(100, 100, 200, 150)
         {
-            Stroke = new Stroke() { Color = CoreShape.Color.Red, Width = 2 },
-            Fill = new Fill() { Color = CoreShape.Color.LightSkyBlue }
+            Stroke = new Stroke(CoreShape.Color.Red, 2),
+            Fill = new Fill(CoreShape.Color.LightSkyBlue)
         };
         private IShape? activeShape;
         private CoreShape.Point oldPoint;
@@ -53,6 +53,7 @@ namespace SampleWPF
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 activeShape?.Drag(oldPoint, currentPoint);
+                skElement.InvalidateVisual();
             }
             else
             {
@@ -68,17 +69,7 @@ namespace SampleWPF
                 }
             }
             oldPoint = currentPoint;
-            skElement.InvalidateVisual();
-        }
-
-        private void skElement_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void skElement_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
+            
         }
     }
 }

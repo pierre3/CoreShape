@@ -2,11 +2,13 @@
 {
     public class Stroke
     {
-        public Color Color { get; set; }
-        public float Width { get; set; }
+        public Color Color { get; set; } = Color.Black;
+        public float Width { get; set; } = 1f;
 
-        public static readonly Stroke NullObject = new NullStroke();
-        public bool IsNull => this is NullStroke;
-        protected sealed class NullStroke : Stroke { }
+        public Stroke(Color color , float width)
+        {
+            Color = color;
+            Width = width;
+        }
     }
 }
