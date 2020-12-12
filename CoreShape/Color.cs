@@ -2,8 +2,16 @@
 
 namespace CoreShape
 {
-    public readonly struct Color : IEquatable<Color>
+    [ReadonlyStructGenerator.ReadonlyStruct]
+    public partial struct Color
     {
+        public byte R { get; init; }
+        public byte G { get; init; }
+        public byte B { get; init; }
+        public byte A { get; init; }
+
+        public Color(byte r, byte g, byte b, byte a = 255) => (R, G, B, A) = (r, g, b, a); 
+
         public static readonly Color IndianRed = new Color(205, 92, 92);
         public static readonly Color LightCoral = new Color(240, 128, 128);
         public static readonly Color Salmon = new Color(250, 128, 114);
@@ -153,17 +161,6 @@ namespace CoreShape
         public static readonly Color DarkSlateGrey = new Color(47, 79, 79);
         public static readonly Color Black = new Color(0, 0, 0);
 
-
-        public byte R { get; init; }
-        public byte G { get; init; }
-        public byte B { get; init; }
-        public byte A { get; init; }
-
-        public Color(byte r, byte g, byte b, byte a = 255) => (R, G, B, A) = (r, g, b, a);
-        public bool Equals(Color other) => (R, G, B, A) == (other.R, other.G, other.B, other.A);
-        public override bool Equals(object? obj) => (obj is Color color) && Equals(color);
-        public override int GetHashCode() => HashCode.Combine(R, G, B, A);
-        public static bool operator ==(Color left, Color right) => left.Equals(right);
-        public static bool operator !=(Color left, Color right) => !(left == right);
+        
     }
 }

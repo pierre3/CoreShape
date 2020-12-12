@@ -29,12 +29,11 @@ namespace CoreShape.Shapes
             {
                 g.DrawRectangle(Bounds, Stroke);
             }
-
         }
 
         public virtual bool HitTest(Point p)
         {
-            if( Bounds.Left <= p.X && p.X <= Bounds.Right 
+            if (Bounds.Left <= p.X && p.X <= Bounds.Right
                 && Bounds.Top <= p.Y && p.Y <= Bounds.Bottom)
             {
                 return true;
