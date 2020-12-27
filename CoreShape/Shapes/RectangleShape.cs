@@ -7,10 +7,18 @@ namespace CoreShape.Shapes
         public Rectangle Bounds { get; protected set; }
         public Stroke? Stroke { get; set; }
         public Fill? Fill { get; set; }
+        protected IHitTestStrategy<RectangleShape> HitTestStrategy { get; set; }
 
         public RectangleShape(Rectangle bounds)
         {
             Bounds = bounds;
+            HitTestStrategy = new RectangleHitTestStrategy();
+        }
+
+        public RectangleShape(Rectangle bounds, IHitTestStrategy<RectangleShape> hitTestStrategy)
+        {
+            Bounds = bounds;
+            HitTestStrategy = hitTestStrategy;
         }
 
         public RectangleShape(Point location, Size size)
@@ -33,15 +41,10 @@ namespace CoreShape.Shapes
 
         public virtual bool HitTest(Point p)
         {
-            if (Bounds.Left <= p.X && p.X <= Bounds.Right
-                && Bounds.Top <= p.Y && p.Y <= Bounds.Bottom)
-            {
-                return true;
-            }
-            return false;
+            return HitTestStrategy.HitTest(p, this);
         }
 
-        public void Drag(Point oldPointer, Point currentPointer)
+        public virtual void Drag(Point oldPointer, Point currentPointer)
         {
             var (dx, dy) = (currentPointer.X - oldPointer.X, currentPointer.Y - oldPointer.Y);
             Bounds = new Rectangle(Bounds.Left + dx, Bounds.Top + dy, Bounds.Size.Width, Bounds.Size.Height);

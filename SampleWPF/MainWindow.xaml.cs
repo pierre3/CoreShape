@@ -29,10 +29,17 @@ namespace SampleWPF
             InitializeComponent();
         }
 
-        private IShape shape = new RectangleShape(100, 100, 200, 150)
-        {
-            Stroke = new Stroke(CoreShape.Color.Red, 2),
-            Fill = new Fill(CoreShape.Color.LightSkyBlue)
+        private IList<IShape> shapes = new[]{ 
+            new OvalShape(new CoreShape.Rectangle(100, 100, 200, 150),new SKRegionOvalHitTestStrategy())
+            {
+                Stroke = new Stroke(CoreShape.Color.Red, 2),
+                //Fill = new Fill(CoreShape.Color.LightSkyBlue)
+            },
+            new RectangleShape(new CoreShape.Rectangle(350, 100, 100, 150))
+            {
+                Stroke = new Stroke(CoreShape.Color.Black, 2),
+                Fill = new Fill(CoreShape.Color.LightPink)
+            },
         };
         private IShape? activeShape;
         private CoreShape.Point oldPoint;
@@ -42,7 +49,10 @@ namespace SampleWPF
         {
             var g = new SkiaGraphics(e.Surface.Canvas);
             g.ClearCanvas(CoreShape.Color.Ivory);
-            shape.Draw(g);
+            foreach (var shape in shapes)
+            {
+                shape.Draw(g);
+            }
         }
 
         private void sKElement_MouseMove(object sender, MouseEventArgs e)
@@ -57,15 +67,19 @@ namespace SampleWPF
             }
             else
             {
-                if (shape.HitTest(currentPoint))
+                foreach (var shape in shapes)
                 {
-                    Cursor = Cursors.SizeAll;
-                    activeShape = shape;
-                }
-                else
-                {
-                    Cursor = Cursors.Arrow;
-                    activeShape = null;
+                    if (shape.HitTest(currentPoint))
+                    {
+                        Cursor = Cursors.SizeAll;
+                        activeShape = shape;
+                        break;
+                    }
+                    else
+                    {
+                        Cursor = Cursors.Arrow;
+                        activeShape = null;
+                    }
                 }
             }
             oldPoint = currentPoint;

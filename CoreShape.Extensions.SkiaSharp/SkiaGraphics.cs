@@ -18,13 +18,26 @@ namespace CoreShape.Extensions.SkiaSharp
 
         public virtual void DrawRectangle(Rectangle rectangle, Stroke stroke)
         {
-            Canvas.DrawRect(rectangle.ToSk(), new SKPaint().SetStroke(stroke));
+            using var paint = new SKPaint().SetStroke(stroke);
+            Canvas.DrawRect(rectangle.ToSk(), paint);
         }
 
         public virtual void FillRectangle(Rectangle rectangle, Fill fill)
         {
-            Canvas.DrawRect(rectangle.ToSk(), new SKPaint().SetFill(fill));
+            using var paint = new SKPaint().SetFill(fill);
+            Canvas.DrawRect(rectangle.ToSk(), paint);
         }
 
+        public virtual void DrawOval(Rectangle rectangle, Stroke stroke)
+        {
+            using var paint = new SKPaint().SetStroke(stroke);
+            Canvas.DrawOval(rectangle.ToSk(), paint );
+        }
+
+        public virtual void FillOval(Rectangle rectangle, Fill fill)
+        {
+            using var paint = new SKPaint().SetFill(fill);
+            Canvas.DrawOval(rectangle.ToSk(), paint);
+        }
     }
 }
