@@ -62,11 +62,15 @@ namespace SampleWPF
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                activeShape?.Drag(oldPoint, currentPoint);
+                if (activeShape is null)
+                { return; }
+                activeShape.Drag(oldPoint, currentPoint);
                 skElement.InvalidateVisual();
             }
             else
             {
+                Cursor = Cursors.Arrow;
+                activeShape = null;
                 foreach (var shape in shapes)
                 {
                     if (shape.HitTest(currentPoint))
@@ -75,15 +79,9 @@ namespace SampleWPF
                         activeShape = shape;
                         break;
                     }
-                    else
-                    {
-                        Cursor = Cursors.Arrow;
-                        activeShape = null;
-                    }
                 }
             }
             oldPoint = currentPoint;
-            
         }
     }
 
