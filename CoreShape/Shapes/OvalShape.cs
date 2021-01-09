@@ -29,6 +29,7 @@ namespace CoreShape.Shapes
             {
                 g.DrawOval(Bounds, Stroke);
             }
+            ResizeHandles.Draw(g);
         }
 
     }

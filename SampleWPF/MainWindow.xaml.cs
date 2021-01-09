@@ -29,7 +29,7 @@ namespace SampleWPF
             InitializeComponent();
         }
 
-        private IList<IShape> shapes = new[]{ 
+        private IList<IShape> shapes = new[]{
             new OvalShape(new CoreShape.Rectangle(100, 100, 200, 150),new SKRegionOvalHitTestStrategy())
             {
                 Stroke = new Stroke(CoreShape.Color.Red, 2),
@@ -73,9 +73,31 @@ namespace SampleWPF
                 activeShape = null;
                 foreach (var shape in shapes)
                 {
-                    if (shape.HitTest(currentPoint))
+                    var resizeType = shape.HitTest(currentPoint);
+                    switch (resizeType)
                     {
-                        Cursor = Cursors.SizeAll;
+                        case ResizeType.ResizeAll:
+                            Cursor = Cursors.SizeAll;
+                            break;
+                        case ResizeType.ResizeN:
+                        case ResizeType.ResizeS:
+                            Cursor = Cursors.SizeNS;
+                            break;
+                        case ResizeType.ResizeE:
+                        case ResizeType.ResizeW:
+                            Cursor = Cursors.SizeWE;
+                            break;
+                        case ResizeType.ResizeNW:
+                        case ResizeType.ResizeSE:
+                            Cursor = Cursors.SizeNWSE;
+                            break;
+                        case ResizeType.ResizeNE:
+                        case ResizeType.ResizeSW:
+                            Cursor = Cursors.SizeNESW;
+                            break;
+                    }
+                    if (resizeType is not ResizeType.None)
+                    {
                         activeShape = shape;
                         break;
                     }
