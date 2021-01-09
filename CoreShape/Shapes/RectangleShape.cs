@@ -1,4 +1,5 @@
 ﻿using CoreShape.Graphics;
+using System.Collections.Generic;
 
 namespace CoreShape.Shapes
 {
@@ -7,18 +8,24 @@ namespace CoreShape.Shapes
         public Rectangle Bounds { get; protected set; }
         public Stroke? Stroke { get; set; }
         public Fill? Fill { get; set; }
+
         protected IHitTestStrategy<RectangleShape> HitTestStrategy { get; set; }
+        protected ResizeHandleCollection ResizeHandles { get; set; }
 
         public RectangleShape(Rectangle bounds)
         {
             Bounds = bounds;
             HitTestStrategy = new RectangleHitTestStrategy();
+            ResizeHandles = new ResizeHandleCollection(8, 8);
+            ResizeHandles.SetLocation(Bounds);
         }
 
         public RectangleShape(Rectangle bounds, IHitTestStrategy<RectangleShape> hitTestStrategy)
         {
             Bounds = bounds;
             HitTestStrategy = hitTestStrategy;
+            ResizeHandles = new ResizeHandleCollection(8, 8);
+            ResizeHandles.SetLocation(Bounds);
         }
 
         public RectangleShape(Point location, Size size)
@@ -37,17 +44,34 @@ namespace CoreShape.Shapes
             {
                 g.DrawRectangle(Bounds, Stroke);
             }
+            ResizeHandles.Draw(g);
         }
 
-        public virtual bool HitTest(Point p)
+        public virtual ResizeType HitTest(Point p)
         {
-            return HitTestStrategy.HitTest(p, this);
+            var resizeType = ResizeHandles.HitTest(p);
+            if (resizeType is not ResizeType.None)
+            {
+                return resizeType;
+            }
+            return HitTestStrategy.HitTest(p, this) ? ResizeType.ResizeAll : ResizeType.None;
         }
 
         public virtual void Drag(Point oldPointer, Point currentPointer)
         {
+            if (ResizeHandles.ActiveHandle is not null)
+            {
+                SetBounds(ResizeHandles.Resize(currentPointer, Bounds));
+                return;
+            }
             var (dx, dy) = (currentPointer.X - oldPointer.X, currentPointer.Y - oldPointer.Y);
-            Bounds = new Rectangle(Bounds.Left + dx, Bounds.Top + dy, Bounds.Size.Width, Bounds.Size.Height);
+            SetBounds(new Rectangle(Bounds.Left + dx, Bounds.Top + dy, Bounds.Size.Width, Bounds.Size.Height));
+        }
+
+        protected void SetBounds(Rectangle bounds)
+        {
+            Bounds = bounds;
+            ResizeHandles.SetLocation(bounds);
         }
     }
 }
