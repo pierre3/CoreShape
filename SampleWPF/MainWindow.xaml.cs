@@ -76,27 +76,27 @@ namespace SampleWPF
                     var resizeType = shape.HitTest(currentPoint);
                     switch (resizeType)
                     {
-                        case ResizeType.ResizeAll:
+                        case HitResult.Body:
                             Cursor = Cursors.SizeAll;
                             break;
-                        case ResizeType.ResizeN:
-                        case ResizeType.ResizeS:
+                        case HitResult.ResizeN:
+                        case HitResult.ResizeS:
                             Cursor = Cursors.SizeNS;
                             break;
-                        case ResizeType.ResizeE:
-                        case ResizeType.ResizeW:
+                        case HitResult.ResizeE:
+                        case HitResult.ResizeW:
                             Cursor = Cursors.SizeWE;
                             break;
-                        case ResizeType.ResizeNW:
-                        case ResizeType.ResizeSE:
+                        case HitResult.ResizeNW:
+                        case HitResult.ResizeSE:
                             Cursor = Cursors.SizeNWSE;
                             break;
-                        case ResizeType.ResizeNE:
-                        case ResizeType.ResizeSW:
+                        case HitResult.ResizeNE:
+                        case HitResult.ResizeSW:
                             Cursor = Cursors.SizeNESW;
                             break;
                     }
-                    if (resizeType is not ResizeType.None)
+                    if (resizeType is not HitResult.None)
                     {
                         activeShape = shape;
                         break;

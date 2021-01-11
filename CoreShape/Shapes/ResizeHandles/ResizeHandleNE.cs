@@ -2,11 +2,11 @@
 
 namespace CoreShape.Shapes
 {
-    public class ResizeHandleNE : ResizeHandle
+    public class ResizeHandleNE : ResizeHandleBase
     {
         public ResizeHandleNE(Rectangle bounds) : base(bounds)
         {
-            Type = ResizeType.ResizeNE;
+            HitResult = HitResult.ResizeNE;
         }
 
         public override Rectangle Resize(Point p, Rectangle parentBounds)

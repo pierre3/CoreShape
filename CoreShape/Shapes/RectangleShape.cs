@@ -47,14 +47,14 @@ namespace CoreShape.Shapes
             ResizeHandles.Draw(g);
         }
 
-        public virtual ResizeType HitTest(Point p)
+        public virtual HitResult HitTest(Point p)
         {
             var resizeType = ResizeHandles.HitTest(p);
-            if (resizeType is not ResizeType.None)
+            if (resizeType is not HitResult.None)
             {
                 return resizeType;
             }
-            return HitTestStrategy.HitTest(p, this) ? ResizeType.ResizeAll : ResizeType.None;
+            return HitTestStrategy.HitTest(p, this) ? HitResult.Body : HitResult.None;
         }
 
         public virtual void Drag(Point oldPointer, Point currentPointer)
