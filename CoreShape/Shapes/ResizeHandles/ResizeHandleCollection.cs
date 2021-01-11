@@ -11,14 +11,14 @@ namespace CoreShape.Shapes
 {
     public class ResizeHandleCollection
     {
-        protected IReadOnlyCollection<ResizeHandle> Items { get; set; }
+        protected IReadOnlyCollection<ResizeHandleBase> Items { get; set; }
 
-        public ResizeHandle? ActiveHandle { get; protected set; }
+        public ResizeHandleBase? ActiveHandle { get; protected set; }
 
         public ResizeHandleCollection(float width, float height)
         {
-            Items = new ReadOnlyCollection<ResizeHandle>(
-                new ResizeHandle[]
+            Items = new ReadOnlyCollection<ResizeHandleBase>(
+                new ResizeHandleBase[]
                 {
                     new ResizeHandleN(new Rectangle(0, 0, width, height)),
                     new ResizeHandleNE(new Rectangle(0, 0, width, height)),
@@ -39,19 +39,19 @@ namespace CoreShape.Shapes
             }
         }
 
-        public ResizeType HitTest(Point p)
+        public HitResult HitTest(Point p)
         {
             foreach (var handle in Items)
             {
                 var resizeType = handle.HitTest(p);
-                if (resizeType is not ResizeType.None)
+                if (resizeType is not HitResult.None)
                 {
                     ActiveHandle = handle;
                     return resizeType;
                 }
             }
             ActiveHandle = null;
-            return ResizeType.None;
+            return HitResult.None;
         }
 
         public Rectangle Resize(Point p, Rectangle parentBounds)

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace CoreShape.Shapes
 {
-    public abstract class ResizeHandle : IShape
+    public abstract class ResizeHandleBase : IShape
     {
-        public ResizeType Type { get; protected set; }
+        public HitResult HitResult { get; protected set; }
         public Rectangle Bounds { get; protected set; }
         public Stroke? Stroke { get; set; } = new Stroke(Color.Black, 1f);
         public Fill? Fill { get; set; } = new Fill(Color.White);
 
-        protected ResizeHandle(Rectangle bounds)
+        protected ResizeHandleBase(Rectangle bounds)
         {
             Bounds = bounds;
         }
@@ -35,12 +35,12 @@ namespace CoreShape.Shapes
             }
         }
 
-        public ResizeType HitTest(Point p)
+        public HitResult HitTest(Point p)
         {
             return (Bounds.Left <= p.X && p.X <= Bounds.Right
                     && Bounds.Top <= p.Y && p.Y <= Bounds.Bottom)
-                    ? Type
-                    : ResizeType.None;
+                    ? HitResult
+                    : HitResult.None;
         }
 
         public void Drag(Point oldPointer, Point currentPointer)

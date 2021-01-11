@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoreShape.Shapes
 {
-    public enum ResizeType
+    public enum HitResult
     {
         None,
         ResizeN,
@@ -17,7 +17,7 @@ namespace CoreShape.Shapes
         ResizeSW,
         ResizeW,
         ResizeNW,
-        ResizeAll
+        Body
     }
     
 }

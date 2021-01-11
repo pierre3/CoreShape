@@ -5,7 +5,7 @@ namespace CoreShape.Shapes
     public interface IShape
     {
         void Draw(IGraphics g);
-        ResizeType HitTest(Point p);
+        HitResult HitTest(Point p);
         void Drag(Point oldPointer, Point currentPointer);
     }
 }
