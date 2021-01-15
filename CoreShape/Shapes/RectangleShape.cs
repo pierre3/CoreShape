@@ -49,10 +49,10 @@ namespace CoreShape.Shapes
 
         public virtual HitResult HitTest(Point p)
         {
-            var resizeType = ResizeHandles.HitTest(p);
-            if (resizeType is not HitResult.None)
+            var hitResult = ResizeHandles.HitTest(p);
+            if (hitResult is not HitResult.None)
             {
-                return resizeType;
+                return hitResult;
             }
             return HitTestStrategy.HitTest(p, this) ? HitResult.Body : HitResult.None;
         }

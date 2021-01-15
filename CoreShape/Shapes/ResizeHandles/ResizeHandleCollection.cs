@@ -43,11 +43,11 @@ namespace CoreShape.Shapes
         {
             foreach (var handle in Items)
             {
-                var resizeType = handle.HitTest(p);
-                if (resizeType is not HitResult.None)
+                var hitResult = handle.HitTest(p);
+                if (hitResult is not HitResult.None)
                 {
                     ActiveHandle = handle;
-                    return resizeType;
+                    return hitResult;
                 }
             }
             ActiveHandle = null;
