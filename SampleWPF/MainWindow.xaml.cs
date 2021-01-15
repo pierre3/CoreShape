@@ -55,56 +55,56 @@ namespace SampleWPF
             }
         }
 
-        private void sKElement_MouseMove(object sender, MouseEventArgs e)
-        {
-            var p = e.GetPosition(skElement);
-            var currentPoint = new CoreShape.Point((float)p.X, (float)p.Y);
+private void sKElement_MouseMove(object sender, MouseEventArgs e)
+{
+    var p = e.GetPosition(skElement);
+    var currentPoint = new CoreShape.Point((float)p.X, (float)p.Y);
 
-            if (e.LeftButton == MouseButtonState.Pressed)
+    if (e.LeftButton == MouseButtonState.Pressed)
+    {
+        if (activeShape is null)
+        { return; }
+        activeShape.Drag(oldPoint, currentPoint);
+        skElement.InvalidateVisual();
+    }
+    else
+    {
+        Cursor = Cursors.Arrow;
+        activeShape = null;
+        foreach (var shape in shapes)
+        {
+            var hitResult = shape.HitTest(currentPoint);
+            switch (hitResult)
             {
-                if (activeShape is null)
-                { return; }
-                activeShape.Drag(oldPoint, currentPoint);
-                skElement.InvalidateVisual();
+                case HitResult.Body:
+                    Cursor = Cursors.SizeAll;
+                    break;
+                case HitResult.ResizeN:
+                case HitResult.ResizeS:
+                    Cursor = Cursors.SizeNS;
+                    break;
+                case HitResult.ResizeE:
+                case HitResult.ResizeW:
+                    Cursor = Cursors.SizeWE;
+                    break;
+                case HitResult.ResizeNW:
+                case HitResult.ResizeSE:
+                    Cursor = Cursors.SizeNWSE;
+                    break;
+                case HitResult.ResizeNE:
+                case HitResult.ResizeSW:
+                    Cursor = Cursors.SizeNESW;
+                    break;
             }
-            else
+            if (hitResult is not HitResult.None)
             {
-                Cursor = Cursors.Arrow;
-                activeShape = null;
-                foreach (var shape in shapes)
-                {
-                    var resizeType = shape.HitTest(currentPoint);
-                    switch (resizeType)
-                    {
-                        case HitResult.Body:
-                            Cursor = Cursors.SizeAll;
-                            break;
-                        case HitResult.ResizeN:
-                        case HitResult.ResizeS:
-                            Cursor = Cursors.SizeNS;
-                            break;
-                        case HitResult.ResizeE:
-                        case HitResult.ResizeW:
-                            Cursor = Cursors.SizeWE;
-                            break;
-                        case HitResult.ResizeNW:
-                        case HitResult.ResizeSE:
-                            Cursor = Cursors.SizeNWSE;
-                            break;
-                        case HitResult.ResizeNE:
-                        case HitResult.ResizeSW:
-                            Cursor = Cursors.SizeNESW;
-                            break;
-                    }
-                    if (resizeType is not HitResult.None)
-                    {
-                        activeShape = shape;
-                        break;
-                    }
-                }
+                activeShape = shape;
+                break;
             }
-            oldPoint = currentPoint;
         }
+    }
+    oldPoint = currentPoint;
+}
     }
 
 }
