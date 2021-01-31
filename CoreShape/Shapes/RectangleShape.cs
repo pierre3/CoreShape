@@ -1,4 +1,5 @@
 ﻿using CoreShape.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace CoreShape.Shapes
@@ -11,6 +12,8 @@ namespace CoreShape.Shapes
 
         protected IHitTestStrategy<RectangleShape> HitTestStrategy { get; set; }
         protected ResizeHandleCollection ResizeHandles { get; set; }
+
+        public bool IsSelected { get; set; }
 
         public RectangleShape(Rectangle bounds)
         {
@@ -44,15 +47,25 @@ namespace CoreShape.Shapes
             {
                 g.DrawRectangle(Bounds, Stroke);
             }
-            ResizeHandles.Draw(g);
+            if (IsSelected)
+            {
+                if (Stroke is null)
+                {
+                    g.DrawRectangle(Bounds, new Stroke(Color.Black, 1));
+                }
+                ResizeHandles.Draw(g);
+            }
         }
 
         public virtual HitResult HitTest(Point p)
         {
-            var hitResult = ResizeHandles.HitTest(p);
-            if (hitResult is not HitResult.None)
+            if (IsSelected)
             {
-                return hitResult;
+                var hitResult = ResizeHandles.HitTest(p);
+                if (hitResult is not HitResult.None)
+                {
+                    return hitResult;
+                }
             }
             return HitTestStrategy.HitTest(p, this) ? HitResult.Body : HitResult.None;
         }
@@ -72,6 +85,22 @@ namespace CoreShape.Shapes
         {
             Bounds = bounds;
             ResizeHandles.SetLocation(bounds);
+        }
+
+        public void Drop()
+        {
+            var (left, top, width, height) = (Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height);
+            if (Bounds.Width < 0)
+            {
+                left = Bounds.Right;
+                width = Math.Abs(Bounds.Width);
+            }
+            if (Bounds.Height < 0)
+            {
+                top = Bounds.Bottom;
+                height = Math.Abs(Bounds.Height);
+            }
+            SetBounds(new Rectangle(left, top, width, height));
         }
     }
 }

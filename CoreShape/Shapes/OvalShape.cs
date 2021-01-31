@@ -29,7 +29,11 @@ namespace CoreShape.Shapes
             {
                 g.DrawOval(Bounds, Stroke);
             }
-            ResizeHandles.Draw(g);
+            if (IsSelected)
+            {
+                g.DrawRectangle(Bounds, new Stroke(Color.Black, 1));
+                ResizeHandles.Draw(g);
+            }
         }
 
     }
