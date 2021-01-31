@@ -12,6 +12,8 @@ namespace CoreShape
         public float Top => Location.Y;
         public float Right { get; }
         public float Bottom { get; }
+        public float Width => Size.Width;
+        public float Height => Size.Height;
 
         public Rectangle(Point location,Size size)
         {
@@ -23,5 +25,6 @@ namespace CoreShape
 
         public Rectangle(float left, float top, float width, float height)
             : this(new Point(left, top), new Size(width, height)) { }
+
     }
 }

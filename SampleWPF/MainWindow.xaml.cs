@@ -55,56 +55,81 @@ namespace SampleWPF
             }
         }
 
-private void sKElement_MouseMove(object sender, MouseEventArgs e)
-{
-    var p = e.GetPosition(skElement);
-    var currentPoint = new CoreShape.Point((float)p.X, (float)p.Y);
-
-    if (e.LeftButton == MouseButtonState.Pressed)
-    {
-        if (activeShape is null)
-        { return; }
-        activeShape.Drag(oldPoint, currentPoint);
-        skElement.InvalidateVisual();
-    }
-    else
-    {
-        Cursor = Cursors.Arrow;
-        activeShape = null;
-        foreach (var shape in shapes)
+        private void sKElement_MouseMove(object sender, MouseEventArgs e)
         {
-            var hitResult = shape.HitTest(currentPoint);
-            switch (hitResult)
+            var p = e.GetPosition(skElement);
+            var currentPoint = new CoreShape.Point((float)p.X, (float)p.Y);
+
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                case HitResult.Body:
-                    Cursor = Cursors.SizeAll;
-                    break;
-                case HitResult.ResizeN:
-                case HitResult.ResizeS:
-                    Cursor = Cursors.SizeNS;
-                    break;
-                case HitResult.ResizeE:
-                case HitResult.ResizeW:
-                    Cursor = Cursors.SizeWE;
-                    break;
-                case HitResult.ResizeNW:
-                case HitResult.ResizeSE:
-                    Cursor = Cursors.SizeNWSE;
-                    break;
-                case HitResult.ResizeNE:
-                case HitResult.ResizeSW:
-                    Cursor = Cursors.SizeNESW;
-                    break;
+                if (activeShape is null)
+                { return; }
+                activeShape.Drag(oldPoint, currentPoint);
+                skElement.InvalidateVisual();
             }
-            if (hitResult is not HitResult.None)
+            else
             {
-                activeShape = shape;
-                break;
+                Cursor = Cursors.Arrow;
+                activeShape = null;
+                foreach (var shape in shapes)
+                {
+                    var hitResult = shape.HitTest(currentPoint);
+                    switch (hitResult)
+                    {
+                        case HitResult.Body:
+                            Cursor = Cursors.SizeAll;
+                            break;
+                        case HitResult.ResizeN:
+                        case HitResult.ResizeS:
+                            Cursor = Cursors.SizeNS;
+                            break;
+                        case HitResult.ResizeE:
+                        case HitResult.ResizeW:
+                            Cursor = Cursors.SizeWE;
+                            break;
+                        case HitResult.ResizeNW:
+                        case HitResult.ResizeSE:
+                            Cursor = Cursors.SizeNWSE;
+                            break;
+                        case HitResult.ResizeNE:
+                        case HitResult.ResizeSW:
+                            Cursor = Cursors.SizeNESW;
+                            break;
+                    }
+                    if (hitResult is not HitResult.None)
+                    {
+                        activeShape = shape;
+                        break;
+                    }
+                }
             }
+            oldPoint = currentPoint;
+        }
+
+        private void skElement_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                return;
+            }
+            foreach (var shape in shapes)
+            {
+                shape.IsSelected = shape == activeShape;
+            }
+            skElement.InvalidateVisual();
+        }
+
+    private void skElement_MouseUp(object sender, MouseButtonEventArgs e)
+    {
+        if (e.LeftButton != MouseButtonState.Released)
+        {
+            return;
+        }
+        if (activeShape is not null)
+        {
+            activeShape.Drop();
         }
     }
-    oldPoint = currentPoint;
-}
     }
 
 }

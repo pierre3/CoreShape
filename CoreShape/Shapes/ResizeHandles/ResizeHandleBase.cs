@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoreShape.Shapes
 {
-    public abstract class ResizeHandleBase : IShape
+    public abstract class ResizeHandleBase : IDrawable, IHitTest
     {
         public HitResult HitResult { get; protected set; }
         public Rectangle Bounds { get; protected set; }
@@ -43,10 +43,6 @@ namespace CoreShape.Shapes
                     : HitResult.None;
         }
 
-        public void Drag(Point oldPointer, Point currentPointer)
-        {
-            throw new NotImplementedException();
-        }
         protected void MoveTo(Point center)
         {
             Bounds = new Rectangle(

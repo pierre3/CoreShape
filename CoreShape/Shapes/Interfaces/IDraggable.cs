@@ -2,10 +2,9 @@
 
 namespace CoreShape.Shapes
 {
-    public interface IShape
+    public interface IDraggable
     {
-        void Draw(IGraphics g);
-        HitResult HitTest(Point p);
         void Drag(Point oldPointer, Point currentPointer);
+        void Drop();
     }
 }
