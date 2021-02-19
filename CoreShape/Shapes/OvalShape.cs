@@ -4,11 +4,14 @@ namespace CoreShape.Shapes
 {
     public partial class OvalShape : RectangleShape
     {
+        public OvalShape() : this(new Rectangle())
+        { }
+
         public OvalShape(Rectangle bounds) : base(bounds, new OvalHitTestStrategy())
         {
         }
 
-        public OvalShape(Rectangle bounds, IHitTestStrategy<RectangleShape> hitTestStrategy)
+        public OvalShape(Rectangle bounds, IHitTestStrategy hitTestStrategy)
             : base(bounds, hitTestStrategy)
         {
         }
@@ -34,6 +37,22 @@ namespace CoreShape.Shapes
                 g.DrawRectangle(Bounds, new Stroke(Color.Black, 1));
                 ResizeHandles.Draw(g);
             }
+        }
+
+        public override IShape Copy(Size delta)
+        {
+            var bounds = new Rectangle
+            {
+                Location = new Point(
+                    Bounds.Left + delta.Width,
+                    Bounds.Top + delta.Height),
+                Size = Bounds.Size
+            };
+            return new OvalShape(bounds, HitTestStrategy)
+            {
+                Stroke = Stroke,
+                Fill = Fill
+            };
         }
 
     }

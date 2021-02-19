@@ -66,5 +66,10 @@ namespace CoreShape.Shapes
                 handle.Draw(g);
             }
         }
+
+        public void SetInitialActiveHandle()
+        {
+            ActiveHandle = Items.First(x=> x is ResizeHandleSE);
+        }
     }
 }

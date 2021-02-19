@@ -8,7 +8,21 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <skiaSharp:SKElement x:Name="skElement" 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ToolBar VerticalAlignment="Top">
+            <RadioButton Width="32" Height="32" Content="↖" IsChecked="True" />
+            <RadioButton Width="32" Height="32">
+                <Rectangle Width="24" Height="16" Stroke="Black"/>
+            </RadioButton>
+            <RadioButton Width="32" Height="32">
+                <Ellipse Width="24" Height="16" Stroke="Black"/>
+            </RadioButton>
+        </ToolBar>
+        <skiaSharp:SKElement Grid.Row="1" 
+                             x:Name="skElement" 
                              PaintSurface="sKElement_PaintSurface" 
                              MouseMove="sKElement_MouseMove"
                              MouseDown="skElement_MouseDown"

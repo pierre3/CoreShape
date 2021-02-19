@@ -29,7 +29,7 @@ namespace SampleWPF
             InitializeComponent();
         }
 
-        private IList<IShape> shapes = new[]{
+        private IList<IShape> shapes = new List<IShape>{
             new OvalShape(new CoreShape.Rectangle(100, 100, 200, 150),new SKRegionOvalHitTestStrategy())
             {
                 Stroke = new Stroke(CoreShape.Color.Red, 2),
@@ -41,8 +41,11 @@ namespace SampleWPF
                 Fill = new Fill(CoreShape.Color.LightPink)
             },
         };
-        private IShape? activeShape;
+        private IDraggable? activeShape;
         private CoreShape.Point oldPoint;
+        private IShapePen Pen = new ShapePen<RectangleShape>(
+            new Stroke(CoreShape.Color.Red, 2.0f),
+            new Fill(CoreShape.Color.LightSeaGreen));
 
 
         private void sKElement_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
@@ -52,6 +55,11 @@ namespace SampleWPF
             foreach (var shape in shapes)
             {
                 shape.Draw(g);
+            }
+            if (activeShape is IShapePen shapePen)
+            {
+
+                shapePen.Draw(g);
             }
         }
 
@@ -71,7 +79,7 @@ namespace SampleWPF
             {
                 Cursor = Cursors.Arrow;
                 activeShape = null;
-                foreach (var shape in shapes)
+                foreach (var shape in shapes.Reverse())
                 {
                     var hitResult = shape.HitTest(currentPoint);
                     switch (hitResult)
@@ -102,6 +110,10 @@ namespace SampleWPF
                         break;
                     }
                 }
+                if (activeShape is null)
+                {
+                    activeShape = Pen;
+                }
             }
             oldPoint = currentPoint;
         }
@@ -112,6 +124,12 @@ namespace SampleWPF
             {
                 return;
             }
+
+            if (activeShape is IShapePen shapePen)
+            {
+                var p = e.GetPosition(skElement);
+                shapePen.Locate(new CoreShape.Point((float)p.X, (float)p.Y));
+            }
             foreach (var shape in shapes)
             {
                 shape.IsSelected = shape == activeShape;
@@ -119,17 +137,31 @@ namespace SampleWPF
             skElement.InvalidateVisual();
         }
 
-    private void skElement_MouseUp(object sender, MouseButtonEventArgs e)
-    {
-        if (e.LeftButton != MouseButtonState.Released)
+        private void skElement_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            return;
-        }
-        if (activeShape is not null)
-        {
+            if (e.LeftButton != MouseButtonState.Released)
+            {
+                return;
+            }
+            if (activeShape is null)
+            {
+                return;
+            }
+
             activeShape.Drop();
+            if (activeShape is IShapePen shapePen)
+            {
+                var shape = shapePen.CreateShape();
+                if (shape.Bounds.Size != default)
+                {
+                    shape.IsSelected = true;
+                    activeShape = shape;
+                    shapes.Add(shape);
+                }
+                skElement.InvalidateVisual();
+            }
+
         }
-    }
     }
 
 }

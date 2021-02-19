@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CoreShape.Shapes
 {
-    public interface IHitTestStrategy<in TShape> where TShape : IShape
+    public interface IHitTestStrategy
     {
-        bool HitTest(Point p, TShape shape);
+        bool HitTest(Point p, IShape shape);
     }
 }

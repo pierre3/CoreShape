@@ -10,10 +10,16 @@ namespace CoreShape.Shapes
         public Stroke? Stroke { get; set; }
         public Fill? Fill { get; set; }
 
-        protected IHitTestStrategy<RectangleShape> HitTestStrategy { get; set; }
+        public IHitTestStrategy HitTestStrategy { get; set; }
+        
         protected ResizeHandleCollection ResizeHandles { get; set; }
 
         public bool IsSelected { get; set; }
+
+        public RectangleShape()
+            : this(new Rectangle())
+        {
+        }
 
         public RectangleShape(Rectangle bounds)
         {
@@ -23,7 +29,7 @@ namespace CoreShape.Shapes
             ResizeHandles.SetLocation(Bounds);
         }
 
-        public RectangleShape(Rectangle bounds, IHitTestStrategy<RectangleShape> hitTestStrategy)
+        public RectangleShape(Rectangle bounds, IHitTestStrategy hitTestStrategy)
         {
             Bounds = bounds;
             HitTestStrategy = hitTestStrategy;
@@ -101,6 +107,30 @@ namespace CoreShape.Shapes
                 height = Math.Abs(Bounds.Height);
             }
             SetBounds(new Rectangle(left, top, width, height));
+        }
+
+        public void Locate(Point location)
+        {
+            Bounds = new Rectangle(location, new Size());
+            ResizeHandles.SetInitialActiveHandle();
+        }
+
+        public virtual IShape Copy(Size delta)
+        {
+            var bounds = new Rectangle
+            {
+                Location = new Point(
+                    Bounds.Left + delta.Width,
+                    Bounds.Top + delta.Height),
+                Size = Bounds.Size
+            };
+            return new RectangleShape(bounds)
+            {
+                Stroke = Stroke,
+                Fill = Fill,
+                HitTestStrategy = HitTestStrategy,
+                IsSelected = true
+            };
         }
     }
 }

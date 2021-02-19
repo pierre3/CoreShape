@@ -3,9 +3,9 @@
 namespace CoreShape.Shapes
 {
 
-    public class RectangleHitTestStrategy : IHitTestStrategy<RectangleShape>
+    public class RectangleHitTestStrategy : IHitTestStrategy
     {
-        public bool HitTest(Point p, RectangleShape shape)
+        public bool HitTest(Point p, IShape shape)
         {
             if (shape.Stroke is not null)
             {
@@ -41,6 +41,7 @@ namespace CoreShape.Shapes
 
             return false;
         }
+
     }
 
 }

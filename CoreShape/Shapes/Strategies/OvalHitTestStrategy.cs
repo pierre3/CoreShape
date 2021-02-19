@@ -1,8 +1,8 @@
 ﻿namespace CoreShape.Shapes
 {
-    public class OvalHitTestStrategy : IHitTestStrategy<RectangleShape>
+    public class OvalHitTestStrategy : IHitTestStrategy
     {
-        public bool HitTest(Point p, RectangleShape shape)
+        public bool HitTest(Point p, IShape shape)
         {
             static double Discriminant(float x, float y, float xr, float yr) => (x * x) / (xr * xr) + (y * y) / (yr * yr);
             var xr = shape.Bounds.Size.Width / 2;

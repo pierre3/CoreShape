@@ -10,17 +10,16 @@ namespace CoreShape
 
         public float Left  => Location.X;
         public float Top => Location.Y;
-        public float Right { get; }
-        public float Bottom { get; }
+        public float Right => Location.X + Size.Width;
+        public float Bottom => Location.Y + Size.Height;
         public float Width => Size.Width;
         public float Height => Size.Height;
+
 
         public Rectangle(Point location,Size size)
         {
             Location = location;
             Size = size;
-            Right = location.X + size.Width;
-            Bottom = location.Y + size.Height;
         }
 
         public Rectangle(float left, float top, float width, float height)
