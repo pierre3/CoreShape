@@ -29,23 +29,10 @@ namespace SampleWPF
             InitializeComponent();
         }
 
-        private IList<IShape> shapes = new List<IShape>{
-            new OvalShape(new CoreShape.Rectangle(100, 100, 200, 150),new SKRegionOvalHitTestStrategy())
-            {
-                Stroke = new Stroke(CoreShape.Color.Red, 2),
-                //Fill = new Fill(CoreShape.Color.LightSkyBlue)
-            },
-            new RectangleShape(new CoreShape.Rectangle(350, 100, 100, 150))
-            {
-                Stroke = new Stroke(CoreShape.Color.Black, 2),
-                Fill = new Fill(CoreShape.Color.LightPink)
-            },
-        };
+        private IList<IShape> shapes = new List<IShape>();
         private IDraggable? activeShape;
         private CoreShape.Point oldPoint;
-        private IShapePen Pen = new ShapePen<RectangleShape>(
-            new Stroke(CoreShape.Color.Red, 2.0f),
-            new Fill(CoreShape.Color.LightSeaGreen));
+        private IShapePen? Pen;
 
 
         private void sKElement_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
@@ -161,6 +148,26 @@ namespace SampleWPF
                 skElement.InvalidateVisual();
             }
 
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender == DefaultButton)
+            {
+                Pen = null;
+            }
+            else if (sender == RectButton)
+            {
+                Pen = new ShapePen<RectangleShape>(
+                    new Stroke(CoreShape.Color.Red, 2.0f),
+                    new Fill(CoreShape.Color.LightSeaGreen));
+            }
+            else if (sender == OvalButton)
+            {
+                Pen = new ShapePen<OvalShape>(
+                    new Stroke(CoreShape.Color.Green, 1.0f),
+                    new Fill(CoreShape.Color.LightYellow));
+            }
         }
     }
 
