@@ -87,7 +87,7 @@ namespace CoreShape.Shapes
             SetBounds(new Rectangle(Bounds.Left + dx, Bounds.Top + dy, Bounds.Size.Width, Bounds.Size.Height));
         }
 
-        protected void SetBounds(Rectangle bounds)
+        public void SetBounds(Rectangle bounds)
         {
             Bounds = bounds;
             ResizeHandles.SetLocation(bounds);
@@ -111,26 +111,9 @@ namespace CoreShape.Shapes
 
         public void Locate(Point location)
         {
-            Bounds = new Rectangle(location, new Size());
+            SetBounds(new Rectangle(location, new Size()));
             ResizeHandles.SetInitialActiveHandle();
         }
 
-        public virtual IShape Copy(Size delta)
-        {
-            var bounds = new Rectangle
-            {
-                Location = new Point(
-                    Bounds.Left + delta.Width,
-                    Bounds.Top + delta.Height),
-                Size = Bounds.Size
-            };
-            return new RectangleShape(bounds)
-            {
-                Stroke = Stroke,
-                Fill = Fill,
-                HitTestStrategy = HitTestStrategy,
-                IsSelected = true
-            };
-        }
     }
 }

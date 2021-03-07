@@ -9,6 +9,6 @@ namespace CoreShape.Shapes
         Fill? Fill { get; set; }
         bool IsSelected { get; set; }
         IHitTestStrategy HitTestStrategy { get; set; }
-        IShape Copy(Size delta);
+        void SetBounds(Rectangle bounds);
     }
 }

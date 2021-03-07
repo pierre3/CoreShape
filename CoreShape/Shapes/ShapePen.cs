@@ -12,9 +12,16 @@ namespace CoreShape.Shapes
         private TShape Shape { get; set; }
         private bool IsDragging { get; set; }
 
-        private Stroke? Stroke { get; set; }
-        private Fill? Fill { get; set; }
-        private IHitTestStrategy? HitTestStrategy { get; set; }
+        public IShape Template { get; set; }
+
+        public ShapePen(TShape template)
+        {
+            Shape = new TShape()
+            {
+                Stroke = new Stroke(Color.Black, 1f)
+            };
+            Template = template;
+        }
 
         public ShapePen(Stroke? stroke, Fill? fill, IHitTestStrategy? hitTestStragegy = null)
         {
@@ -22,9 +29,15 @@ namespace CoreShape.Shapes
             {
                 Stroke = new Stroke(Color.Black, 1f)
             };
-            Stroke = stroke;
-            Fill = fill;
-            HitTestStrategy = hitTestStragegy;
+            Template = new TShape()
+            {
+                Stroke = stroke,
+                Fill = fill
+            };
+            if (hitTestStragegy is not null)
+            {
+                Template.HitTestStrategy = hitTestStragegy;
+            }
         }
 
         public void Drag(Point oldPointer, Point currentPointer)
@@ -54,14 +67,15 @@ namespace CoreShape.Shapes
 
         public IShape CreateShape()
         {
-            var shape = Shape.Copy(new Size());
-            shape.Stroke = Stroke;
-            shape.Fill = Fill;
-            if (HitTestStrategy is not null)
+            var shape= new TShape()
             {
-                shape.HitTestStrategy = HitTestStrategy;
-            }
-            return shape;
-        }
+                Stroke = Template.Stroke,
+                Fill = Template.Fill,
+                HitTestStrategy = Template.HitTestStrategy,
+                IsSelected = true
+            };
+            shape.SetBounds(Shape.Bounds);
+            return shape;          
+         }
     }
 }

@@ -39,21 +39,5 @@ namespace CoreShape.Shapes
             }
         }
 
-        public override IShape Copy(Size delta)
-        {
-            var bounds = new Rectangle
-            {
-                Location = new Point(
-                    Bounds.Left + delta.Width,
-                    Bounds.Top + delta.Height),
-                Size = Bounds.Size
-            };
-            return new OvalShape(bounds, HitTestStrategy)
-            {
-                Stroke = Stroke,
-                Fill = Fill
-            };
-        }
-
     }
 }
