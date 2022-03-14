@@ -2,8 +2,7 @@
 
 namespace CoreShape
 {
-    [ReadonlyStructGenerator.ReadonlyStruct]
-    public partial struct Rectangle
+    public record struct Rectangle
     {
         public Point Location { get; init; }
         public Size Size { get; init; }

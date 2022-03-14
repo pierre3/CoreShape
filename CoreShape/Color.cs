@@ -2,8 +2,8 @@
 
 namespace CoreShape
 {
-    [ReadonlyStructGenerator.ReadonlyStruct]
-    public partial struct Color
+    
+    public record struct Color
     {
         public byte R { get; init; }
         public byte G { get; init; }
