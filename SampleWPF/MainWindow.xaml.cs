@@ -35,7 +35,7 @@ namespace SampleWPF
         private IShapePen? Pen;
 
 
-        private void sKElement_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
+        private void SKElement_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
             var g = new SkiaGraphics(e.Surface.Canvas);
             g.ClearCanvas(CoreShape.Color.Ivory);
@@ -50,7 +50,7 @@ namespace SampleWPF
             }
         }
 
-        private void sKElement_MouseMove(object sender, MouseEventArgs e)
+        private void SKElement_MouseMove(object sender, MouseEventArgs e)
         {
             var p = e.GetPosition(skElement);
             var dpi = VisualTreeHelper.GetDpi(this);
@@ -106,7 +106,7 @@ namespace SampleWPF
             oldPoint = currentPoint;
         }
 
-        private void skElement_MouseDown(object sender, MouseButtonEventArgs e)
+        private void SkElement_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton != MouseButtonState.Pressed)
             {
@@ -126,7 +126,7 @@ namespace SampleWPF
             skElement.InvalidateVisual();
         }
 
-        private void skElement_MouseUp(object sender, MouseButtonEventArgs e)
+        private void SkElement_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton != MouseButtonState.Released)
             {

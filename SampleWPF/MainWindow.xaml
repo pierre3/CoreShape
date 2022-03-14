@@ -23,10 +23,10 @@
         </ToolBar>
         <skiaSharp:SKElement Grid.Row="1" 
                              x:Name="skElement" 
-                             PaintSurface="sKElement_PaintSurface" 
-                             MouseMove="sKElement_MouseMove"
-                             MouseDown="skElement_MouseDown"
-                             MouseUp="skElement_MouseUp"/>
+                             PaintSurface="SKElement_PaintSurface" 
+                             MouseMove="SKElement_MouseMove"
+                             MouseDown="SkElement_MouseDown"
+                             MouseUp="SkElement_MouseUp"/>
 
     </Grid>
 </Window>
