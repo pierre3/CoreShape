@@ -1,9 +1,4 @@
 ﻿using CoreShape.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoreShape.Shapes
 {
@@ -67,7 +62,7 @@ namespace CoreShape.Shapes
 
         public IShape CreateShape()
         {
-            var shape= new TShape()
+            var shape = new TShape()
             {
                 Stroke = Template.Stroke,
                 Fill = Template.Fill,
@@ -75,7 +70,7 @@ namespace CoreShape.Shapes
                 IsSelected = true
             };
             shape.SetBounds(Shape.Bounds);
-            return shape;          
-         }
+            return shape;
+        }
     }
 }

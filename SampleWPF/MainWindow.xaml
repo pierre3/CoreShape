@@ -13,7 +13,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ToolBar VerticalAlignment="Top">
-            <RadioButton x:Name="DefaultButton"  Width="32" Height="32" Content="↖" IsChecked="True" Checked="RadioButton_Checked" />
+            <RadioButton x:Name="DefaultButton" Width="32" Height="32" Content="↖" IsChecked="True" Checked="RadioButton_Checked" />
             <RadioButton x:Name="RectButton" Width="32" Height="32" Checked="RadioButton_Checked">
                 <Rectangle Width="24" Height="16" Stroke="Black"/>
             </RadioButton>

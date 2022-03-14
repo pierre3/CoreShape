@@ -53,7 +53,8 @@ namespace SampleWPF
         private void sKElement_MouseMove(object sender, MouseEventArgs e)
         {
             var p = e.GetPosition(skElement);
-            var currentPoint = new CoreShape.Point((float)p.X, (float)p.Y);
+            var dpi = VisualTreeHelper.GetDpi(this);
+            var currentPoint = new CoreShape.Point((float)(p.X*dpi.DpiScaleX), (float)(p.Y*dpi.DpiScaleY));
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -115,7 +116,8 @@ namespace SampleWPF
             if (activeShape is IShapePen shapePen)
             {
                 var p = e.GetPosition(skElement);
-                shapePen.Locate(new CoreShape.Point((float)p.X, (float)p.Y));
+                var dpi = VisualTreeHelper.GetDpi(this);
+                shapePen.Locate(new CoreShape.Point((float)(p.X * dpi.DpiScaleX), (float)(p.Y * dpi.DpiScaleY)));
             }
             foreach (var shape in shapes)
             {
@@ -170,5 +172,4 @@ namespace SampleWPF
             }
         }
     }
-
 }
