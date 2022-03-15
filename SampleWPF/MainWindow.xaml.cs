@@ -54,7 +54,7 @@ namespace SampleWPF
         {
             var p = e.GetPosition(skElement);
             var dpi = VisualTreeHelper.GetDpi(this);
-            var currentPoint = new CoreShape.Point((float)(p.X*dpi.DpiScaleX), (float)(p.Y*dpi.DpiScaleY));
+            var currentPoint = new CoreShape.Point((float)(p.X * dpi.DpiScaleX), (float)(p.Y * dpi.DpiScaleY));
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -65,33 +65,23 @@ namespace SampleWPF
             }
             else
             {
-                Cursor = Cursors.Arrow;
                 activeShape = null;
                 foreach (var shape in shapes.Reverse())
                 {
                     var hitResult = shape.HitTest(currentPoint);
-                    switch (hitResult)
+                    Cursor = hitResult switch
                     {
-                        case HitResult.Body:
-                            Cursor = Cursors.SizeAll;
-                            break;
-                        case HitResult.ResizeN:
-                        case HitResult.ResizeS:
-                            Cursor = Cursors.SizeNS;
-                            break;
-                        case HitResult.ResizeE:
-                        case HitResult.ResizeW:
-                            Cursor = Cursors.SizeWE;
-                            break;
-                        case HitResult.ResizeNW:
-                        case HitResult.ResizeSE:
-                            Cursor = Cursors.SizeNWSE;
-                            break;
-                        case HitResult.ResizeNE:
-                        case HitResult.ResizeSW:
-                            Cursor = Cursors.SizeNESW;
-                            break;
-                    }
+                        HitResult.Body => Cursors.SizeAll,
+                        HitResult.ResizeN => Cursors.SizeNS,
+                        HitResult.ResizeS => Cursors.SizeNS,
+                        HitResult.ResizeE => Cursors.SizeWE,
+                        HitResult.ResizeW => Cursors.SizeWE,
+                        HitResult.ResizeNW => Cursors.SizeNWSE,
+                        HitResult.ResizeSE => Cursors.SizeNWSE,
+                        HitResult.ResizeNE => Cursors.SizeNESW,
+                        HitResult.ResizeSW => Cursors.SizeNESW,
+                        _ => Cursors.Arrow
+                    };
                     if (hitResult is not HitResult.None)
                     {
                         activeShape = shape;
@@ -154,22 +144,18 @@ namespace SampleWPF
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (sender == DefaultButton)
+            Pen = sender switch
             {
-                Pen = null;
-            }
-            else if (sender == RectButton)
-            {
-                Pen = new ShapePen<RectangleShape>(
-                    new Stroke(CoreShape.Color.Red, 2.0f),
-                    new Fill(CoreShape.Color.LightSeaGreen));
-            }
-            else if (sender == OvalButton)
-            {
-                Pen = new ShapePen<OvalShape>(
-                    new Stroke(CoreShape.Color.Green, 1.0f),
-                    new Fill(CoreShape.Color.LightYellow));
-            }
+                RadioButton radio when radio == RectButton => 
+                    new ShapePen<RectangleShape>(
+                        new Stroke(CoreShape.Color.Red, 2.0f),
+                        new Fill(CoreShape.Color.LightSeaGreen)),
+                RadioButton radio when radio == OvalButton => 
+                    new ShapePen<RectangleShape>(
+                        new Stroke(CoreShape.Color.Red, 2.0f),
+                        new Fill(CoreShape.Color.LightSeaGreen)),
+                _ => null
+            };
         }
     }
 }
