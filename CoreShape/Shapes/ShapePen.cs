@@ -35,10 +35,38 @@ namespace CoreShape.Shapes
             }
         }
 
-        public void Drag(Point oldPointer, Point currentPointer)
+    public void Locate(Point location)
+    {
+        Shape.Locate(location);
+        IsDragging = true;
+    }
+
+    public void Drag(Point oldPointer, Point currentPointer)
+    {
+        Shape.Drag(oldPointer, currentPointer);
+    }
+
+    public void Drop()
+    {
+        Shape.Drop();
+        IsDragging = false;
+    }
+    public IShape? CreateShape()
+    {
+        if (Shape.Bounds.Size == default)
         {
-            Shape.Drag(oldPointer, currentPointer);
+            return null;
         }
+        var shape = new TShape()
+        {
+            Stroke = Template.Stroke,
+            Fill = Template.Fill,
+            HitTestStrategy = Template.HitTestStrategy,
+            IsSelected = true
+        };
+        shape.SetBounds(Shape.Bounds);
+        return shape;
+    }
 
         public void Draw(IGraphics g)
         {
@@ -48,29 +76,10 @@ namespace CoreShape.Shapes
             }
         }
 
-        public void Drop()
-        {
-            Shape.Drop();
-            IsDragging = false;
-        }
+        
 
-        public void Locate(Point location)
-        {
-            Shape.Locate(location);
-            IsDragging = true;
-        }
+        
 
-        public IShape CreateShape()
-        {
-            var shape = new TShape()
-            {
-                Stroke = Template.Stroke,
-                Fill = Template.Fill,
-                HitTestStrategy = Template.HitTestStrategy,
-                IsSelected = true
-            };
-            shape.SetBounds(Shape.Bounds);
-            return shape;
-        }
+        
     }
 }

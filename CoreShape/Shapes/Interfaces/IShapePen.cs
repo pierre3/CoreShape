@@ -5,6 +5,6 @@ namespace CoreShape.Shapes
     public interface IShapePen : IDraggable, IDrawable, ILocatable
     {
         IShape Template { get; set; }
-        IShape CreateShape();
+        IShape? CreateShape();
     }
 }

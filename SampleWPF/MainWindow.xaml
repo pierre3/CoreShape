@@ -13,11 +13,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ToolBar VerticalAlignment="Top">
-            <RadioButton x:Name="DefaultButton" Width="32" Height="32" Content="↖" IsChecked="True" Checked="RadioButton_Checked" />
-            <RadioButton x:Name="RectButton" Width="32" Height="32" Checked="RadioButton_Checked">
+            <RadioButton x:Name="DefaultButton" Width="32" Height="32" Content="↖" IsChecked="True" Checked="DefaultButton_Checked" />
+            <RadioButton x:Name="RectButton" Width="32" Height="32" Checked="RectButton_Checked">
                 <Rectangle Width="24" Height="16" Stroke="Black"/>
             </RadioButton>
-            <RadioButton x:Name="OvalButton" Width="32" Height="32" Checked="RadioButton_Checked">
+            <RadioButton x:Name="OvalButton" Width="32" Height="32" Checked="OvalButton_Checked">
                 <Ellipse Width="24" Height="16" Stroke="Black"/>
             </RadioButton>
         </ToolBar>

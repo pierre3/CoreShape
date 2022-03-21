@@ -32,7 +32,7 @@ namespace SampleWPF
         private IList<IShape> shapes = new List<IShape>();
         private IDraggable? activeShape;
         private CoreShape.Point oldPoint;
-        private IShapePen? Pen;
+        private IShapePen? ShapePen;
 
 
         private void SKElement_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
@@ -45,55 +45,62 @@ namespace SampleWPF
             }
             if (activeShape is IShapePen shapePen)
             {
-
                 shapePen.Draw(g);
             }
         }
 
-        private void SKElement_MouseMove(object sender, MouseEventArgs e)
+private void SKElement_MouseMove(object sender, MouseEventArgs e)
+{
+    var currentPoint = GetMousePoint(e);
+    if (e.LeftButton == MouseButtonState.Pressed)
+    {
+        if (activeShape is null)
+        { return; }
+        activeShape.Drag(oldPoint, currentPoint);
+        skElement.InvalidateVisual();
+    }
+    else
+    {
+        activeShape = ShapePen;
+        foreach (var shape in shapes.Reverse())
+        {
+            var hitResult = shape.HitTest(currentPoint);
+            Cursor = SwitchCursor(hitResult);
+            if (hitResult is not HitResult.None)
+            {
+                activeShape = shape;
+                break;
+            }
+        }
+    }
+    oldPoint = currentPoint;
+}
+
+        private CoreShape.Point GetMousePoint(MouseEventArgs e)
         {
             var p = e.GetPosition(skElement);
             var dpi = VisualTreeHelper.GetDpi(this);
-            var currentPoint = new CoreShape.Point((float)(p.X * dpi.DpiScaleX), (float)(p.Y * dpi.DpiScaleY));
+            var currentPoint = new CoreShape.Point(
+                (float)(p.X * dpi.DpiScaleX),
+                (float)(p.Y * dpi.DpiScaleY));
+            return currentPoint;
+        }
 
-            if (e.LeftButton == MouseButtonState.Pressed)
+        private static Cursor SwitchCursor(HitResult hitResult)
+        {
+            return hitResult switch
             {
-                if (activeShape is null)
-                { return; }
-                activeShape.Drag(oldPoint, currentPoint);
-                skElement.InvalidateVisual();
-            }
-            else
-            {
-                activeShape = null;
-                foreach (var shape in shapes.Reverse())
-                {
-                    var hitResult = shape.HitTest(currentPoint);
-                    Cursor = hitResult switch
-                    {
-                        HitResult.Body => Cursors.SizeAll,
-                        HitResult.ResizeN => Cursors.SizeNS,
-                        HitResult.ResizeS => Cursors.SizeNS,
-                        HitResult.ResizeE => Cursors.SizeWE,
-                        HitResult.ResizeW => Cursors.SizeWE,
-                        HitResult.ResizeNW => Cursors.SizeNWSE,
-                        HitResult.ResizeSE => Cursors.SizeNWSE,
-                        HitResult.ResizeNE => Cursors.SizeNESW,
-                        HitResult.ResizeSW => Cursors.SizeNESW,
-                        _ => Cursors.Arrow
-                    };
-                    if (hitResult is not HitResult.None)
-                    {
-                        activeShape = shape;
-                        break;
-                    }
-                }
-                if (activeShape is null)
-                {
-                    activeShape = Pen;
-                }
-            }
-            oldPoint = currentPoint;
+                HitResult.Body => Cursors.SizeAll,
+                HitResult.ResizeN => Cursors.SizeNS,
+                HitResult.ResizeS => Cursors.SizeNS,
+                HitResult.ResizeE => Cursors.SizeWE,
+                HitResult.ResizeW => Cursors.SizeWE,
+                HitResult.ResizeNW => Cursors.SizeNWSE,
+                HitResult.ResizeSE => Cursors.SizeNWSE,
+                HitResult.ResizeNE => Cursors.SizeNESW,
+                HitResult.ResizeSW => Cursors.SizeNESW,
+                _ => Cursors.Arrow
+            };
         }
 
         private void SkElement_MouseDown(object sender, MouseButtonEventArgs e)
@@ -107,7 +114,8 @@ namespace SampleWPF
             {
                 var p = e.GetPosition(skElement);
                 var dpi = VisualTreeHelper.GetDpi(this);
-                shapePen.Locate(new CoreShape.Point((float)(p.X * dpi.DpiScaleX), (float)(p.Y * dpi.DpiScaleY)));
+                var location = new CoreShape.Point((float)(p.X * dpi.DpiScaleX), (float)(p.Y * dpi.DpiScaleY));
+                shapePen.Locate(location);
             }
             foreach (var shape in shapes)
             {
@@ -126,36 +134,37 @@ namespace SampleWPF
             {
                 return;
             }
-
             activeShape.Drop();
             if (activeShape is IShapePen shapePen)
             {
                 var shape = shapePen.CreateShape();
-                if (shape.Bounds.Size != default)
+                if (shape is null)
                 {
-                    shape.IsSelected = true;
-                    activeShape = shape;
-                    shapes.Add(shape);
+                    return;
                 }
-                skElement.InvalidateVisual();
+                shapes.Add(shape);
+                activeShape = shape;
             }
-
+            skElement.InvalidateVisual();
         }
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        private void DefaultButton_Checked(object sender, RoutedEventArgs e)
         {
-            Pen = sender switch
-            {
-                RadioButton radio when radio == RectButton => 
-                    new ShapePen<RectangleShape>(
-                        new Stroke(CoreShape.Color.Red, 2.0f),
-                        new Fill(CoreShape.Color.LightSeaGreen)),
-                RadioButton radio when radio == OvalButton => 
-                    new ShapePen<RectangleShape>(
-                        new Stroke(CoreShape.Color.Red, 2.0f),
-                        new Fill(CoreShape.Color.LightSeaGreen)),
-                _ => null
-            };
+            ShapePen = null;
+        }
+
+        private void RectButton_Checked(object sender, RoutedEventArgs e)
+        {
+            ShapePen = new ShapePen<RectangleShape>(
+                new Stroke(CoreShape.Color.Red, 2.0f),
+                new Fill(CoreShape.Color.LightSeaGreen));
+        }
+
+        private void OvalButton_Checked(object sender, RoutedEventArgs e)
+        {
+            ShapePen = new ShapePen<OvalShape>(
+                new Stroke(CoreShape.Color.Green, 1.0f),
+                new Fill(CoreShape.Color.LightYellow));
         }
     }
 }
