@@ -4,20 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:skiaSharp="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
-        xmlns:local="clr-namespace:SampleWPF"
+        xmlns:local="clr-namespace:SampleWPF" 
+        xmlns:viewmodels="clr-namespace:SampleWPF.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <viewmodels:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ToolBar VerticalAlignment="Top">
-            <RadioButton x:Name="DefaultButton" Width="32" Height="32" Content="↖" IsChecked="True" Checked="DefaultButton_Checked" />
-            <RadioButton x:Name="RectButton" Width="32" Height="32" Checked="RectButton_Checked">
+            <RadioButton x:Name="DefaultButton" Width="32" Height="32" Content="↖" IsChecked="True" Command="{Binding DefaultPenCommand}" />
+            <RadioButton x:Name="RectButton" Width="32" Height="32" Command="{Binding RectanglePenCommand}">
                 <Rectangle Width="24" Height="16" Stroke="Black"/>
             </RadioButton>
-            <RadioButton x:Name="OvalButton" Width="32" Height="32" Checked="OvalButton_Checked">
+            <RadioButton x:Name="OvalButton" Width="32" Height="32" Command="{Binding OvalPenCommand}">
                 <Ellipse Width="24" Height="16" Stroke="Black"/>
             </RadioButton>
         </ToolBar>
