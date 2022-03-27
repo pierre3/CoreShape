@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CoreShape.Extensions.SkiaSharp;
 using Reactive.Bindings.Interactivity;
-using System.Reactive.Linq;
-using System.Windows.Input;
 using SampleWPF.ViewModels.Bindings;
-using System.Windows;
 using SkiaSharp.Views.Desktop;
-using CoreShape.Extensions.SkiaSharp;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 
 namespace SampleWPF.Bindings.Converters
 {

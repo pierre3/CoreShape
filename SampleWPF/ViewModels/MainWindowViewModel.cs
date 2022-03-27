@@ -4,13 +4,10 @@ using Reactive.Bindings.Extensions;
 using SampleWPF.Models;
 using SampleWPF.ViewModels.Bindings;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace SampleWPF.ViewModels
@@ -56,27 +53,27 @@ namespace SampleWPF.ViewModels
             MouseDownCommand = new ReactiveCommand<MouseEvent>();
             MouseUpCommand = new ReactiveCommand<MouseEvent>();
             SubscribeMouseMoveCommand();
-            SubscribeMouseDragCommand();
             SubscribeMouseDownCommand();
+            SubscribeMouseDragCommand();
             SubscribeMouseUpCommand();
         }
 
         private void SubscribeMouseMoveCommand()
         {
             MouseMoveCommand
-                .Where(mouse => !mouse.IsLButtonPressed)
-                .Subscribe(mouse => HitResult.Value = ShapeManager.HitTest(mouse.MousePosition))
+                .Where(args => !args.IsLButtonPressed)
+                .Subscribe(args => HitResult.Value = ShapeManager.HitTest(args.MousePosition))
                 .AddTo(disposable);
         }
 
         private void SubscribeMouseDownCommand()
         {
             MouseDownCommand
-                .Where(mouse => mouse.IsLButtonPressed)
-                .Subscribe(mouse =>
+                .Where(args => args.IsLButtonPressed)
+                .Subscribe(args =>
                 {
-                    ShapeManager.Locate(mouse.MousePosition);
-                    mouse.InvalidateVisual?.Invoke();
+                    ShapeManager.Locate(args.MousePosition);
+                    args.InvalidateVisual?.Invoke();
                 })
                 .AddTo(disposable);
         }
@@ -85,22 +82,22 @@ namespace SampleWPF.ViewModels
         {
             MouseMoveCommand
                 .Pairwise()
-                .Where(a => a.NewItem.IsLButtonPressed)
-                .Subscribe(a =>
+                .Where(args => args.NewItem.IsLButtonPressed)
+                .Subscribe(args =>
                 {
-                    ShapeManager.Drag(a.OldItem.MousePosition, a.NewItem.MousePosition);
-                    a.NewItem.InvalidateVisual?.Invoke();
+                    ShapeManager.Drag(args.OldItem.MousePosition, args.NewItem.MousePosition);
+                    args.NewItem.InvalidateVisual?.Invoke();
                 }).AddTo(disposable);
         }
 
         private void SubscribeMouseUpCommand()
         {
             MouseUpCommand
-                .Where(mouse => mouse.IsLButtonReleased)
-                .Subscribe(mouse =>
+                .Where(args => args.IsLButtonReleased)
+                .Subscribe(args =>
                 {
                     ShapeManager.Drop();
-                    mouse.InvalidateVisual?.Invoke();
+                    args.InvalidateVisual?.Invoke();
                 })
                 .AddTo(disposable);
         }
