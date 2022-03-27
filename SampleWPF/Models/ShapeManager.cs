@@ -10,9 +10,8 @@ namespace SampleWPF.Models
 {
     internal class ShapeManager
     {
-        private IList<IShape> shapes = new List<IShape>();
+        private readonly IList<IShape> shapes = new List<IShape>();
         private IDraggable? activeShape;
-        private CoreShape.Point oldPoint;
         private IShapePen? shapePen;
 
         public void Draw(IGraphics g)
@@ -28,12 +27,7 @@ namespace SampleWPF.Models
             }
         }
 
-        public void UpdateOldPoint(CoreShape.Point currentPoint)
-        {
-            oldPoint = currentPoint;
-        }
-
-        public void Drag(CoreShape.Point currentPoint)
+        public void Drag(CoreShape.Point oldPoint, CoreShape.Point currentPoint)
         {
             activeShape?.Drag(oldPoint, currentPoint);
         }
@@ -63,7 +57,7 @@ namespace SampleWPF.Models
             foreach (var shape in shapes)
             {
                 shape.IsSelected = shape == activeShape;
-            }   
+            }
         }
 
         public void Drop()

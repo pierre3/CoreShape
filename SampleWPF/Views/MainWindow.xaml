@@ -1,0 +1,56 @@
+﻿<Window x:Class="SampleWPF.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:skiaSharp="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
+        xmlns:viewmodels="clr-namespace:SampleWPF.ViewModels"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:rp="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
+        xmlns:converters="clr-namespace:SampleWPF.Bindings.Converters"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <viewmodels:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <converters:HitResultToCursorConverter x:Key="HitResultToCursorConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ToolBar VerticalAlignment="Top">
+            <RadioButton x:Name="DefaultButton" Width="32" Height="32" Content="↖" IsChecked="True" Command="{Binding DefaultPenCommand}" />
+            <RadioButton x:Name="RectButton" Width="32" Height="32" Command="{Binding RectanglePenCommand}">
+                <Rectangle Width="24" Height="16" Stroke="Black"/>
+            </RadioButton>
+            <RadioButton x:Name="OvalButton" Width="32" Height="32" Command="{Binding OvalPenCommand}">
+                <Ellipse Width="24" Height="16" Stroke="Black"/>
+            </RadioButton>
+        </ToolBar>
+        <skiaSharp:SKElement Grid.Row="1" 
+                             PaintSurface="SKElement_PaintSurface" 
+                             Cursor="{Binding HitResult.Value,Converter={StaticResource HitResultToCursorConverter}}">
+            <behaviors:Interaction.Triggers>
+                <behaviors:EventTrigger EventName="MouseMove">
+                    <rp:EventToReactiveCommand Command="{Binding MouseMoveCommand}">
+                        <converters:MouseEventReactiveConverter />
+                    </rp:EventToReactiveCommand>
+                </behaviors:EventTrigger>
+                <behaviors:EventTrigger EventName="MouseDown">
+                    <rp:EventToReactiveCommand Command="{Binding MouseDownCommand}">
+                        <converters:MouseEventReactiveConverter />
+                    </rp:EventToReactiveCommand>
+                </behaviors:EventTrigger>
+                <behaviors:EventTrigger EventName="MouseUp">
+                    <rp:EventToReactiveCommand Command="{Binding MouseUpCommand}">
+                        <converters:MouseEventReactiveConverter />
+                    </rp:EventToReactiveCommand>
+                </behaviors:EventTrigger>
+            </behaviors:Interaction.Triggers>
+        </skiaSharp:SKElement>
+
+    </Grid>
+</Window>
