@@ -9,14 +9,13 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-
 namespace SampleWPF.ViewModels
 {
     internal class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     {
         private ShapeManager ShapeManager { get; } = new();
 
-        public ReactiveProperty<HitResult> HitResult { get; } = new ReactiveProperty<HitResult>();
+        public ReactiveProperty<HitResult> HitResult { get; } = new();
 
         public ReactiveCommand<MouseEvent> MouseMoveCommand { get; }
         public ReactiveCommand<MouseEvent> MouseDownCommand { get; }
@@ -38,12 +37,9 @@ namespace SampleWPF.ViewModels
 
         public MainWindowViewModel()
         {
-            DefaultPenCommand = new ReactiveCommand()
-                .WithSubscribe(() => ShapeManager.SetDefaultPen()).AddTo(disposable);
-            RectanglePenCommand = new ReactiveCommand()
-                .WithSubscribe(() => ShapeManager.SetRectanglePen()).AddTo(disposable);
-            OvalPenCommand = new ReactiveCommand()
-                .WithSubscribe(() => ShapeManager.SetOvalPen()).AddTo(disposable);
+            DefaultPenCommand = new ReactiveCommand().WithSubscribe(() => ShapeManager.SetDefaultPen()).AddTo(disposable);
+            RectanglePenCommand = new ReactiveCommand().WithSubscribe(() => ShapeManager.SetRectanglePen()).AddTo(disposable);
+            OvalPenCommand = new ReactiveCommand().WithSubscribe(() => ShapeManager.SetOvalPen()).AddTo(disposable);
 
             PaintSurfaceCommand = new ReactiveCommand<PaintSurfaceEvent>()
                 .WithSubscribe(args => ShapeManager.Draw(args.Graphics))
