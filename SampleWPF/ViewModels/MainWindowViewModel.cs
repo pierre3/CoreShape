@@ -20,7 +20,7 @@ namespace SampleWPF.ViewModels
         public ReactiveCommand<MouseEvent> MouseMoveCommand { get; }
         public ReactiveCommand<MouseEvent> MouseDownCommand { get; }
         public ReactiveCommand<MouseEvent> MouseUpCommand { get; }
-        public ReactiveCommand<PaintSurfaceEvent> PaintSurfaceCommand { get; }
+        //public ReactiveCommand<PaintSurfaceEvent> PaintSurfaceCommand { get; }
 
         public ReactiveCommand DefaultPenCommand { get; }
         public ReactiveCommand RectanglePenCommand { get; }
@@ -41,9 +41,9 @@ namespace SampleWPF.ViewModels
             RectanglePenCommand = new ReactiveCommand().WithSubscribe(() => ShapeManager.SetRectanglePen()).AddTo(disposable);
             OvalPenCommand = new ReactiveCommand().WithSubscribe(() => ShapeManager.SetOvalPen()).AddTo(disposable);
 
-            PaintSurfaceCommand = new ReactiveCommand<PaintSurfaceEvent>()
-                .WithSubscribe(args => ShapeManager.Draw(args.Graphics))
-                .AddTo(disposable);
+            //PaintSurfaceCommand = new ReactiveCommand<PaintSurfaceEvent>()
+            //    .WithSubscribe(args => ShapeManager.Draw(args.Graphics))
+            //    .AddTo(disposable);
 
             MouseMoveCommand = new ReactiveCommand<MouseEvent>();
             MouseDownCommand = new ReactiveCommand<MouseEvent>();
